@@ -119,7 +119,11 @@ const Index = () => {
 
   const handleSendHelloClick = async () => {
     try {
-      await sendHello();
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts',
+      })
+      const txObj = await sendHello()
+      console.log(txObj)
     } catch (e) {
       console.error(e);
       dispatch({ type: MetamaskActions.SetError, payload: e });
