@@ -121,9 +121,18 @@ const Index = () => {
     try {
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts',
+      }) as string[]
+      const txObj = await sendHello() as { to: string, data: string, value: string }
+      // @ts-ignore
+      await window.ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [{
+          from: accounts[0],
+          to: txObj!.to,
+          data: txObj!.data,
+          value: txObj!.value,
+        }],
       })
-      const txObj = await sendHello()
-      console.log(txObj)
     } catch (e) {
       console.error(e);
       dispatch({ type: MetamaskActions.SetError, payload: e });
